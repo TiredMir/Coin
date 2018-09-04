@@ -118,7 +118,8 @@ def show():
                 indent=0, sort_keys=True, separators=(',', ':')
             ).replace('{','').replace('}','').replace('\"','').replace(',','')
             print(pparsed_list)
-    except (OSError, IOError) as err:
+            exit(0)
+    except(OSError, IOError) as err:
         print("Oops, something went wrong. Error Code: 2")
         return 2
 
