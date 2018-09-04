@@ -24,7 +24,7 @@ def signal_handler(sig, frame):
     exit(1)
 
 
-# Check connectivity, current issues: Get return code
+# Check connectivity
 def connectivity():
     hostname = 'free.currencyconverterapi.com'
     platform_name = platform.system()
@@ -108,7 +108,7 @@ def write_to_file():
     return curr
 
 
-# Work in progress halp!
+# Show the available currency list
 def show():
     yes_list = ["Yes", "yes", "Y", "y"]
     no_list = ["No", "no", "N", "n"]
