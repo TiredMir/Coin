@@ -9,7 +9,6 @@ import shlex
 import platform
 import signal
 
-
 # Clear the screen
 def clear():
     if os.name == 'nt':
@@ -110,36 +109,18 @@ def write_to_file():
 
 # Show the available currency list
 def show():
-    yes_list = ["Yes", "yes", "Y", "y"]
-    no_list = ["No", "no", "N", "n"]
-    choice = input(
-                    "Would you like to see the available currencies?\n"
-                    "Enter yes or no:\n\n"
-    )
-    if choice in yes_list:
-        currencylist()
-        filepath = './currencylist.txt'
-        cat_command = shlex.split("cat {}".format(filepath))
-        less_command = shlex.split("less")
-        try:
-            cat_pipe = subprocess.Popen(cat_command, stdout=subprocess.PIPE)
-            less_pipe = subprocess.Popen(
-                                        less_command, stdin=cat_pipe.stdout,
-                                        stdout=subprocess.PIPE
-            )
-            cat_pipe.stdout.close()
-            stdout = less_pipe.communicate
-        except subprocess.CalledProcessError as err:
-            print("Oops, something went wrong. Error Code: 2")
-            return 2
-    elif choice in no_list:
-        pass
-    else:
-        print("Unknown value. Please try again...\n")
-        choice = input(
-                        "Would you like to see the available currencies?\n"
-                        "Enter yes or no:\n\n"
-        )
+    currencylist()
+    try:
+        with open('./currencylist.txt') as currency_list_obj:
+            parsed_list = json.loads(currency_list_obj.read())
+            pparsed_list = json.dumps(
+                parsed_list, ensure_ascii=False,
+                indent=0, sort_keys=True, separators=(',', ':')
+            ).replace('{','').replace('}','').replace('\"','').replace(',','')
+            print(pparsed_list)
+    except (OSError, IOError) as err:
+        print("Oops, something went wrong. Error Code: 2")
+        return 2
 
 
 def menu():
@@ -171,7 +152,6 @@ def menu():
                             "Enter a three letter currency code(e.g. USD) "
                             "for the target currency:\n"
                             ))
-
             exchange()
             exit (0)
         elif answer == 2:
@@ -180,6 +160,7 @@ def menu():
             exit(0)
         elif answer == 3:
             show()
+            exit(0)
         elif answer == 4:
             connect = int(connectivity())
             if connect == 0:
@@ -206,7 +187,6 @@ def main():
     parser.add_argument('-t', type=str, help='The target currency unit to \
     convert to', default='EUR')
     if len(sys.argv) <= 1:
-        # parser.print_help()
         menu()
         exit(4)
     args = parser.parse_args()
