@@ -3,7 +3,7 @@ A program for converting currencies
 
 # Usage
 1. You can launch the program by typing `python coin.py`
-2. Or you could `chmod +x coin.py` and create a softlink to the program in your PATH.  
+2. (Linux only) Or you could `chmod +x coin.py` and create a softlink to the program in your PATH.  
 Also use `coin -h` for the help menu. A man page is coming soon.
 
 # Further information
