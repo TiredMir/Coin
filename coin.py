@@ -28,19 +28,24 @@ def connectivity():
     hostname = 'free.currencyconverterapi.com'
     platform_name = platform.system()
     if platform_name == 'Windows':
-        # try:
-        os.system("ping -n 1 {} | findstr dummy".format(hostname))
-        return 0
-        # except:
 
-    else:
-        command = shlex.split("ping -c1 {}".format(hostname))
+            # os.system("ping -n 1 {} | findstr dummy".format(hostname))
+        command = shlex.split("ping -n 1 {} ".format(hostname))
         try:
-            output_test = subprocess.check_output(command)
+            command_output = subprocess.check_output(command)
             return 0
         except subprocess.CalledProcessError as err:
             print("The server is currently unreachable."
-                  "Please try again later.")
+                  "Please try again later.\n")
+            return 3
+    else:
+        command = shlex.split("ping -c1 {}".format(hostname))
+        try:
+            command_output = subprocess.check_output(command)
+            return 0
+        except subprocess.CalledProcessError as err:
+            print("The server is currently unreachable."
+                  "Please try again later.\n")
             return 3
 
 
@@ -48,8 +53,8 @@ def connectivity():
 # finally convert the values
 def exchange():
     global amount, base, target, free_url
-    base = base.upper()
-    target = target.upper()
+    base = base.strip().upper()
+    target = target.strip().upper()
     free_url = "http://free.currencyconverterapi.com/api/v6/convert?q="
     rounding_digits = 4
     json_exchange = urllib.request.urlopen(
@@ -75,7 +80,7 @@ def currencylist():
     )
     # Write the values to a file called currencylist.txt
     try:
-        fcurrencylist = open("currencylist.txt", "w", encoding='utf-8')
+        fcurrencylist = open("currencylist.txt", "w", encoding='utf8')
         fcurrencylist.write(pparsed_currency)
     finally:
         fcurrencylist.close()
@@ -111,7 +116,7 @@ def write_to_file():
 def show():
     currencylist()
     try:
-        with open('./currencylist.txt') as currency_list_obj:
+        with open('./currencylist.txt', encoding="utf8") as currency_list_obj:
             parsed_list = json.loads(currency_list_obj.read())
             pparsed_list = json.dumps(
                 parsed_list, ensure_ascii=False,
@@ -143,15 +148,15 @@ def menu():
                     break
         if answer == 1:
             global amount, base, target
-            amount = float(input("Enter an amount in the base "
+            amount = float(input("Enter an AMOUNT in the BASE "
                                  "currency:\n"))
             base = str(input(
                             "Enter a three letter currency "
-                            "code(e.g. USD) for the base currency:\n"
+                            "code(e.g. USD) for the BASE currency:\n"
                             ))
             target = str(input(
                             "Enter a three letter currency code(e.g. USD) "
-                            "for the target currency:\n"
+                            "for the TARGET currency:\n"
                             ))
             exchange()
             exit (0)
