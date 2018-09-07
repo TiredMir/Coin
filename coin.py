@@ -9,6 +9,7 @@ import shlex
 import platform
 import signal
 
+
 # Clear the screen
 def clear():
     if os.name == 'nt':
@@ -207,3 +208,5 @@ def main():
 if __name__ == "__main__":
     connectivity()
     main()
+
+    
