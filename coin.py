@@ -21,7 +21,7 @@ def clear():
 def signal_handler(sig, frame):
     print("\nCaught SIGINT")
     print("Program terminated")
-    exit(1)
+    sys.exit(1)
 
 
 # Check connectivity
@@ -124,7 +124,7 @@ def show():
                 indent=0, sort_keys=True, separators=(',', ':')
             ).replace('{','').replace('}','').replace('\"','').replace(',','')
             print(pparsed_list)
-            exit(0)
+            sys.exit(0)
     except(OSError, IOError) as err:
         print("Oops, something went wrong. Error Code: 2")
         return 2
@@ -160,21 +160,21 @@ def menu():
                             "for the TARGET currency:\n"
                             ))
             exchange()
-            exit (0)
+            sys.exit (0)
         elif answer == 2:
             currencylist()
             print("Currency list updated.\n")
-            exit(0)
+            sys.exit(0)
         elif answer == 3:
             show()
-            exit(0)
+            sys.exit(0)
         elif answer == 4:
             connect = int(connectivity())
             if connect == 0:
                 print("Server is up and running.\n")
-                exit (0)
+                sys.exit (0)
             elif connect == 3:
-                exit (3)
+                sys.exit (3)
         else:
             print("Please enter a valid number from the "
                   "list.\n")
@@ -195,7 +195,7 @@ def main():
     convert to', default='EUR')
     if len(sys.argv) <= 1:
         menu()
-        exit(4)
+        sys.exit(4)
     args = parser.parse_args()
     global amount, base, target, free_url
     amount = args.a
